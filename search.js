@@ -11,6 +11,7 @@ var fs = require('fs');
 
 //no borrar ver error en 880
 
+
     const page = await browser.newPage();
     page.authenticate({username: 'xxxxxx', password: 'xxxxxxx'});
     await page.goto('http://www.anmat.gov.ar/atc/CodigosATC.asp');
@@ -38,15 +39,18 @@ var fs = require('fs');
             }
             return comp;
         })(); return obj})
+         // Buscar cada uno en la ruta https://servicios.pami.org.ar/vademecum/views/consultaPublica/listado.zul
         
-        
+        // const page = await browser.newPage();
+        // page.authenticate({username: 'xxxxxx', password: 'xxxxxxx'});
+        // await page.goto('http://www.anmat.gov.ar/atc/CodigosATC.asp');
         // await page.goto('https://servicios.pami.org.ar/vademecum/views/consultaPublica/listado.zul');
 
         // var pagina =     [...document.querySelectorAll(".vd-grid.z-row")].map(e=>{ return [...e.getElementsByTagName("td")].map((ei)=>{return [...ei.querySelectorAll(".z-label")].map(r=>r.innerText)})})
         
         // paginador document.getElementsByClassName("z-paging-next")[1].click()
         
-        //    const page = await browser.newPage({ args: [ '--proxy-server=dsibot.sintys.gob.ar/service/dindex.php:443' ] });
+        // const page = await browser.newPage({ args: [ '--proxy-server=dsibot.sintys.gob.ar/service/dindex.php:443' ] });
         
         
         
@@ -55,12 +59,10 @@ var fs = require('fs');
             //        if(err) {
                 //            return console.log(err);
     //        }
-    console.log('Hola PUTO');
+
     //        console.log("The file was saved!");
     //    });
    });
-
    // console.log(items)
-
    //  await browser.close();
 })();
