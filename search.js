@@ -14,6 +14,7 @@ var fs = require('fs');
     const page = await browser.newPage();
     page.authenticate({username: 'xxxxxx', password: 'xxxxxxx'});
     await page.goto('http://www.anmat.gov.ar/atc/CodigosATC.asp');
+
     
     const items = await page.evaluate(() => {
         
@@ -39,6 +40,8 @@ var fs = require('fs');
         })(); return obj})
         
         
+        // await page.goto('https://servicios.pami.org.ar/vademecum/views/consultaPublica/listado.zul');
+
         // var pagina =     [...document.querySelectorAll(".vd-grid.z-row")].map(e=>{ return [...e.getElementsByTagName("td")].map((ei)=>{return [...ei.querySelectorAll(".z-label")].map(r=>r.innerText)})})
         
         // paginador document.getElementsByClassName("z-paging-next")[1].click()
