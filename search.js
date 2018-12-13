@@ -12,7 +12,7 @@ var fs = require('fs');
 //no borrar ver error en 880
 
     const page = await browser.newPage();
-    page.authenticate({username: 'jlobasso', password: 'Jorge-0000'});
+    page.authenticate({username: 'xxxxxx', password: 'xxxxxxx'});
     await page.goto('http://www.anmat.gov.ar/atc/CodigosATC.asp');
     
     const items = await page.evaluate(() => {
