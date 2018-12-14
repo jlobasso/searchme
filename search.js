@@ -1,19 +1,26 @@
 const puppeteer = require('puppeteer');
 var fs = require('fs');
 
+var credenciales = false;
+
+if(fs.existsSync('./credenciales.json')){
+    credenciales = require('./credenciales.json');
+}
+
+
 (async () => {
 
     const browser = await puppeteer.launch(    
        {
-           headless:false,
-           args: [ '--proxy-server=proxy.sintys.gob.ar:8080' ] 
+        //    headless:false,
+           args: (credenciales)?[credenciales.path]:[] 
     });
 
 //no borrar ver error en 880
 
 
     const page = await browser.newPage();
-    page.authenticate({username: 'XXXXX', password: 'XXXX'});
+    (credenciales)?page.authenticate({username: credenciales.username, password: credenciales.passwrd}):"";
     await page.goto('http://www.anmat.gov.ar/atc/CodigosATC.asp');
 
     
