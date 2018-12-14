@@ -16,9 +16,6 @@ if(fs.existsSync('./credenciales.json')){
            args: (credenciales)?[credenciales.path]:[] 
     });
 
-//no borrar ver error en 880
-
-
     const page = await browser.newPage();
     (credenciales)?page.authenticate({username: credenciales.username, password: credenciales.passwrd}):"";
     await page.goto('http://www.anmat.gov.ar/atc/CodigosATC.asp');
@@ -66,15 +63,16 @@ if(fs.existsSync('./credenciales.json')){
             return comp;
         })(); return obj})
 
-
+        const browser = await puppeteer.launch(    
+        {
+            args: (credenciales)?[credenciales.path]:[] 
+        });
+        const page = await browser.newPage();
+        (credenciales)?page.authenticate({username: credenciales.username, password: credenciales.passwrd}):"";
+        await page.goto('http://www.anmat.gov.ar/atc/CodigosATC.asp');
 
          // Buscar cada uno en la ruta https://servicios.pami.org.ar/vademecum/views/consultaPublica/listado.zul
         
-        // const page = await browser.newPage();
-        // page.authenticate({username: 'xxxxxx', password: 'xxxxxxx'});
-        // await page.goto('http://www.anmat.gov.ar/atc/CodigosATC.asp');
-        // await page.goto('https://servicios.pami.org.ar/vademecum/views/consultaPublica/listado.zul');
-
         // var pagina =     [...document.querySelectorAll(".vd-grid.z-row")].map(e=>{ return [...e.getElementsByTagName("td")].map((ei)=>{return [...ei.querySelectorAll(".z-label")].map(r=>r.innerText)})})
         
         // paginador document.getElementsByClassName("z-paging-next")[1].click()
