@@ -62,6 +62,7 @@ if(fs.existsSync('./credenciales.json')){
             }
             return comp;
         })(); return obj})
+<<<<<<< HEAD
 
         // (credenciales)?page.authenticate({username: credenciales.username, password: credenciales.passwrd}):"";
         // await page.goto('http://www.anmat.gov.ar/atc/CodigosATC.asp');
@@ -74,49 +75,12 @@ if(fs.existsSync('./credenciales.json')){
         
         // const page = await browser.newPage({ args: [ '--proxy-server=dsibot.sintys.gob.ar/service/dindex.php:443' ] });
         
+=======
+ 
+>>>>>>> a7ecc75633403c82a866a1ed43194d03b4f01b43
     }).then((res) => {
         
         console.log(res);
-        var Worker = require('webworker-threads').Worker;
 
-        
-
-        // obtener todos ls datos y guardarlos en una colection de una base NOSQL
-        
-        //    fs.writeFile("/home/andres/Documents/PROYECTOS/delibery/public/fakeAPI/menuBarPrimoHermano.json", JSON.stringify(res), function(err) {
-            //        if(err) {
-                //            return console.log(err);
-    //        }
-
-    //        console.log("The file was saved!");
-    //    });
    });
-   // console.log(items)
-   //  await browser.close();
 })();
-
-
-
-
-
-// var actual  = document.getElementsByClassName("StrDesc3")[881]
-            
-//             var comp = [];
-
-            
-//             while(actual.nextElementSibling.className != "StrCodigo3"){
-                                
-//                 if(actual.nextElementSibling.className === "StrDesc4" ){       
-//                     comp.push(actual.nextElementSibling.innerText);
-//                 }    
-//                 actual = actual.nextElementSibling;
-//                 if(!actual.nextElementSibling){
-                    
-//                     if(actual.className === "StrDesc4" ){       
-//                         comp.push(actual.innerText);
-//                     }   
-                    
-//                     break;
-//                 };
-
-//             }
