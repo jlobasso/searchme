@@ -13,7 +13,7 @@ var fs = require('fs');
 
 
     const page = await browser.newPage();
-    page.authenticate({username: 'jlobasso', password: 'Jorge-0000'});
+    page.authenticate({username: 'XXXXX', password: 'XXXX'});
     await page.goto('http://www.anmat.gov.ar/atc/CodigosATC.asp');
 
     
