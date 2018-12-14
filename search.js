@@ -1,6 +1,8 @@
 const puppeteer = require('puppeteer');
 var fs = require('fs');
 
+var searchDrug = require('./searchDrug');
+
 var credenciales = false;
 
 if(fs.existsSync('./credenciales.json')){
@@ -8,63 +10,90 @@ if(fs.existsSync('./credenciales.json')){
 }
 
 
-(async () => {
+var buscaDrogas = function(){
+    searchDrug('http://www.anmat.gov.ar/atc/CodigosATC.asp',"paap")
+}
 
-    const browser = await puppeteer.launch(    
-       {
-        //    headless:false,
-           args: (credenciales)?[credenciales.path]:[] 
-    });
+if(!fs.existsSync('./drogas.json')){
 
-    const page = await browser.newPage();
-    (credenciales)?page.authenticate({username: credenciales.username, password: credenciales.passwrd}):"";
-    await page.goto('http://www.anmat.gov.ar/atc/CodigosATC.asp');
+    (async () => {
 
+        const browser = await puppeteer.launch(    
+           {
+            //    headless:false,
+               args: (credenciales)?[credenciales.path]:[] 
+        });
     
-    const items = await page.evaluate(() => {
+        const page = await browser.newPage();
+        (credenciales)?page.authenticate({username: credenciales.username, password: credenciales.passwrd}):"";
+        await page.goto('http://www.anmat.gov.ar/atc/CodigosATC.asp');
+    
         
-        
-      return [...document.getElementsByClassName("StrDesc3")].map(e=>{ var obj = {}; obj[e.innerText] = (function(){
+        const items = await page.evaluate(() => {
             
             
-            var actual  = e
-            
-            var comp = [];
-            
-            while(actual.nextElementSibling.className != "StrCodigo3"){
+          return [...document.getElementsByClassName("StrDesc3")].map(e=>{ var obj = {}; obj[e.innerText] = (function(){
                 
                 
-                if(actual.className === "StrCodigo4"){       
-                    var temp = {}
-                    temp['codigo'] = actual.innerText;
-                    if(actual.nextElementSibling.className === "StrDesc4"){  
-                        temp['descripcion'] = actual.nextElementSibling.innerText;     
-                    }    
-                    comp.push(temp);
-                }
-
-
-                actual = actual.nextElementSibling;
-
-                if(!actual.nextElementSibling){
+                var actual  = e
+                
+                var comp = [];
+                
+                while(actual.nextElementSibling.className != "StrCodigo3"){
+                    
                     
                     if(actual.className === "StrCodigo4"){       
-                        var temp2 = {}
-                        temp2['codigo'] = actual.innerText;
+                        var temp = {}
+                        temp['codigo'] = actual.innerText;
                         if(actual.nextElementSibling.className === "StrDesc4"){  
-                            temp2['descripcion'] = actual.nextElementSibling.innerText;     
+                            temp['descripcion'] = actual.nextElementSibling.innerText;     
                         }    
-                        comp.push(temp2);
+                        comp.push(temp);
                     }
-                    break;
-                };
+    
+    
+                    actual = actual.nextElementSibling;
+    
+                    if(!actual.nextElementSibling){
+                        
+                        if(actual.className === "StrCodigo4"){       
+                            var temp2 = {}
+                            temp2['codigo'] = actual.innerText;
+                            if(actual.nextElementSibling.className === "StrDesc4"){  
+                                temp2['descripcion'] = actual.nextElementSibling.innerText;     
+                            }    
+                            comp.push(temp2);
+                        }
+                        break;
+                    };
+    
+                }
+                return comp;
+            })(); return obj})
+     
+        }).then((res) => {
+            
+            fs.writeFile('drogas.json', JSON.stringify(res), function (err) {
+                if (err) throw err;
+                console.log('Archivo Creado con éxito');
+                buscaDrogas();
+              });
+    
+    
+    
+       });
+       browser.close()
+    })();
 
-            }
-            return comp;
-        })(); return obj})
-<<<<<<< HEAD
 
-        // (credenciales)?page.authenticate({username: credenciales.username, password: credenciales.passwrd}):"";
+}
+else
+{
+    drogas = require('./drogas.json');
+    buscaDrogas();
+}
+
+// (credenciales)?page.authenticate({username: credenciales.username, password: credenciales.passwrd}):"";
         // await page.goto('http://www.anmat.gov.ar/atc/CodigosATC.asp');
 
          // Buscar cada uno en la ruta https://servicios.pami.org.ar/vademecum/views/consultaPublica/listado.zul
@@ -75,12 +104,3 @@ if(fs.existsSync('./credenciales.json')){
         
         // const page = await browser.newPage({ args: [ '--proxy-server=dsibot.sintys.gob.ar/service/dindex.php:443' ] });
         
-=======
- 
->>>>>>> a7ecc75633403c82a866a1ed43194d03b4f01b43
-    }).then((res) => {
-        
-        console.log(res);
-
-   });
-})();
