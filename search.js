@@ -82,6 +82,10 @@ if(fs.existsSync('./credenciales.json')){
     }).then((res) => {
         
         console.log(res);
+        var Worker = require('webworker-threads').Worker;
+
+        
+
         // obtener todos ls datos y guardarlos en una colection de una base NOSQL
         
         //    fs.writeFile("/home/andres/Documents/PROYECTOS/delibery/public/fakeAPI/menuBarPrimoHermano.json", JSON.stringify(res), function(err) {
