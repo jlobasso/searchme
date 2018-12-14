@@ -63,13 +63,8 @@ if(fs.existsSync('./credenciales.json')){
             return comp;
         })(); return obj})
 
-        const browser = await puppeteer.launch(    
-        {
-            args: (credenciales)?[credenciales.path]:[] 
-        });
-        const page = await browser.newPage();
-        (credenciales)?page.authenticate({username: credenciales.username, password: credenciales.passwrd}):"";
-        await page.goto('http://www.anmat.gov.ar/atc/CodigosATC.asp');
+        // (credenciales)?page.authenticate({username: credenciales.username, password: credenciales.passwrd}):"";
+        // await page.goto('http://www.anmat.gov.ar/atc/CodigosATC.asp');
 
          // Buscar cada uno en la ruta https://servicios.pami.org.ar/vademecum/views/consultaPublica/listado.zul
         
