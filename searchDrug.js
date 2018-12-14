@@ -27,6 +27,11 @@ buscaDroga = (drogas) => {
         ///A ESTE NIVEL, FOR DE DROGAS
         async function buscaDroga(page, drogas, index) {
 
+            await page.evaluate(()=>{
+                document.getElementById("zk_comp_28").value = "";
+            })
+
+
             await page.type('#zk_comp_28', drogas[index]);
 
             await page.click('#zk_comp_80');
@@ -68,8 +73,14 @@ buscaDroga = (drogas) => {
                 //ACA GUARDAMOS LOS ITEMS de cada pagina de cada droga
                 console.log(items);
 
-                if (items.max > paginaAcual) {
-                    pasaPagina(page, paginaAcual++)//la recursiva
+                if (items.max > paginaActual) {
+                    console.log("cambiamos de pagina a la "+paginaActual++)
+                    pasaPagina(page, paginaActual++)//la recursiva
+                }else{
+                    if(drogas[index++]){
+                        console.log("buscamos "+drogas[index++])
+                        buscaDroga(page, drogas, index++)//la recursiva
+                    }
                 }
 
 
@@ -78,9 +89,6 @@ buscaDroga = (drogas) => {
             pasaPagina(page)//esta es la pimera vez
             //FIN DE PAGINA DE DROGA
 
-            // if(drogas[index++]){
-            //     buscaDroga(page, drogas, index++)//la recursiva
-            // }
 
         }
 
