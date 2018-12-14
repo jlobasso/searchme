@@ -10,8 +10,8 @@ if(fs.existsSync('./credenciales.json')){
 }
 
 
-var buscaDrogas = function(){
-    searchDrug('http://www.anmat.gov.ar/atc/CodigosATC.asp',"paap")
+var buscaDrogas = function(drogas){
+    searchDrug(drogas)
 }
 
 if(!fs.existsSync('./drogas.json')){
@@ -76,7 +76,7 @@ if(!fs.existsSync('./drogas.json')){
             fs.writeFile('drogas.json', JSON.stringify(res), function (err) {
                 if (err) throw err;
                 console.log('Archivo Creado con éxito');
-                buscaDrogas();
+                buscaDrogas(res);
               });
     
     
@@ -90,7 +90,23 @@ if(!fs.existsSync('./drogas.json')){
 else
 {
     drogas = require('./drogas.json');
-    buscaDrogas();
+    
+    
+    var drogas = drogas.reduce((a,c)=>{
+        for(p in c){
+            c[p].forEach(d => {
+                if(d){
+                    if(d.descripcion){
+                        a.push(d.descripcion)
+                    }
+                }
+            })
+        }
+            return a;
+        },[])
+    
+    
+    buscaDrogas(drogas);
 }
 
 // (credenciales)?page.authenticate({username: credenciales.username, password: credenciales.passwrd}):"";
