@@ -1,7 +1,9 @@
 const browserPage = require('./browserPage');
-// var fs = require('fs');
+var fs = require('fs');
 
 async function buscaDroga(drogas) {
+
+    paginasDroga = [];
 
     var drogas = drogas.datos.reduce((a,c)=>{
         for(p in c){
@@ -65,17 +67,42 @@ async function buscaDroga(drogas) {
 
             });
 
+
             //ACA GUARDAMOS LOS ITEMS de cada pagina de cada droga
-            console.log(items);
+            paginasDroga.push(items);
+            // console.log(items);
 
             if (items.max > paginaActual) {
                 console.log("cambiamos de pagina a la "+paginaActual++)
                 pasaPagina(page, paginaActual++)//la recursiva
             }else{
+                //termino la droga 
+
+                var nombreArchivo = drogas[index].replace(/ /g,"_")+".json"
+                
+                var archivo = {};
+                archivo.fechaCreacion = Date.now();
+                archivo.datos = paginasDroga;
+                
+
+                fs.writeFile('tmp/'+nombreArchivo, JSON.stringify(archivo), function (err) {
+                    if (err) throw err;
+                    console.log('Archivo '+nombreArchivo+' guardado con éxito');
+                  });
+
+                  paginasDroga = [];  
+
+                //cambiamos de droga
                 if(drogas[index++]){
-                    console.log("buscamos "+drogas[index++])
+                    console.log("buscamos "+drogas[index++]) 
+                    
+                    //ver la edad del archivo
                     buscaDroga(page, drogas, index++)//la recursiva
+                }else{
+                    //browse close aca
+                    console.log("termino todo");                    
                 }
+                
                 
             }
 
@@ -85,8 +112,7 @@ async function buscaDroga(drogas) {
         pasaPagina(page)//esta es la pimera vez
         //FIN DE PAGINA DE DROGA
 
-    }
-
+    }    
     buscaDroga(page, drogas, 0)//esta es la pimera vez
 
 }

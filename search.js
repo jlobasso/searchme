@@ -17,7 +17,7 @@ if(fs.existsSync('tmp/drogas.json')){
     existeArchivo = true;
 }
 
-if(!existeArchivo || (drogas.fechaCreacion - Date.now()) > unDia){
+if(!existeArchivo || (Date.now() - drogas.fechaCreacion) > unDia){
 
     var url = "http://www.anmat.gov.ar/atc/CodigosATC.asp";
 
@@ -64,14 +64,12 @@ if(!existeArchivo || (drogas.fechaCreacion - Date.now()) > unDia){
         }).then((res) => {
 
            var resultado = {};
-
-           resultado.datos = res;
-            
+           resultado.datos = res;            
            resultado.fechaCreacion = Date.now();
 
             fs.writeFile('tmp/drogas.json', JSON.stringify(resultado), function (err) {
                 if (err) throw err;
-                console.log('Archivo de drogas con éxito');
+                console.log('Archivo eneral de drogas guardado con éxito');
                 
                 buscaDrogas(resultado);
               });
