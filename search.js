@@ -1,14 +1,7 @@
-const puppeteer = require('puppeteer');
+const browserPage = require('./browserPage');
 var fs = require('fs');
 
 var searchDrug = require('./searchDrug');
-
-var credenciales = false;
-
-if(fs.existsSync('./credenciales.json')){
-    credenciales = require('./credenciales.json');
-}
-
 
 var buscaDrogas = function(drogas){
     searchDrug(drogas)
@@ -16,21 +9,13 @@ var buscaDrogas = function(drogas){
 
 if(!fs.existsSync('./drogas.json')){
 
-    (async () => {
+    var url = "http://www.anmat.gov.ar/atc/CodigosATC.asp";
 
-        const browser = await puppeteer.launch(    
-           {
-            //    headless:false,
-               args: (credenciales)?[credenciales.path]:[] 
-        });
+    (async () => {
     
-        const page = await browser.newPage();
-        (credenciales)?page.authenticate({username: credenciales.username, password: credenciales.passwrd}):"";
-        await page.goto('http://www.anmat.gov.ar/atc/CodigosATC.asp');
-    
-        
-        const items = await page.evaluate(() => {
-            
+        var page = await browserPage(url);  
+
+        const items = await page.evaluate(() => {            
             
           return [...document.getElementsByClassName("StrDesc3")].map(e=>{ var obj = {}; obj[e.innerText] = (function(){
                 
@@ -76,11 +61,21 @@ if(!fs.existsSync('./drogas.json')){
             fs.writeFile('drogas.json', JSON.stringify(res), function (err) {
                 if (err) throw err;
                 console.log('Archivo Creado con éxito');
-                buscaDrogas(res);
+                var drogas = res.reduce((a,c)=>{
+                    for(p in c){
+                        c[p].forEach(d => {
+                            if(d){
+                                if(d.descripcion){
+                                    a.push(d.descripcion)
+                                }
+                            }
+                        })
+                    }
+                        return a;
+                    },[])
+                buscaDrogas(drogas);
               });
-    
-    
-    
+          
        });
        browser.close()
     })();
@@ -89,8 +84,7 @@ if(!fs.existsSync('./drogas.json')){
 }
 else
 {
-    drogas = require('./drogas.json');
-    
+    drogas = require('./drogas.json');    
     
     var drogas = drogas.reduce((a,c)=>{
         for(p in c){
@@ -108,15 +102,3 @@ else
     
     buscaDrogas(drogas);
 }
-
-// (credenciales)?page.authenticate({username: credenciales.username, password: credenciales.passwrd}):"";
-        // await page.goto('http://www.anmat.gov.ar/atc/CodigosATC.asp');
-
-         // Buscar cada uno en la ruta https://servicios.pami.org.ar/vademecum/views/consultaPublica/listado.zul
-        
-        // var pagina =     [...document.querySelectorAll(".vd-grid.z-row")].map(e=>{ return [...e.getElementsByTagName("td")].map((ei)=>{return [...ei.querySelectorAll(".z-label")].map(r=>r.innerText)})})
-        
-        // paginador document.getElementsByClassName("z-paging-next")[1].click()
-        
-        // const page = await browser.newPage({ args: [ '--proxy-server=dsibot.sintys.gob.ar/service/dindex.php:443' ] });
-        
