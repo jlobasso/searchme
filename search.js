@@ -7,7 +7,17 @@ var buscaDrogas = function(drogas){
     searchDrug(drogas)
 }
 
-if(!fs.existsSync('./drogas.json')){
+var unDia = 86400000;
+var existeArchivo = false;
+
+var drogas = {fechaCreacion:0};
+
+if(fs.existsSync('./tmp/drogas.json')){
+    drogas = require('./tmp/drogas.json');     
+    existeArchivo = true;
+}
+
+if(!existeArchivo || (drogas.fechaCreacion - Date.now()) > unDia){
 
     var url = "http://www.anmat.gov.ar/atc/CodigosATC.asp";
 
@@ -18,15 +28,11 @@ if(!fs.existsSync('./drogas.json')){
         const items = await page.evaluate(() => {            
             
           return [...document.getElementsByClassName("StrDesc3")].map(e=>{ var obj = {}; obj[e.innerText] = (function(){
-                
-                
-                var actual  = e
-                
+                                
+                var actual  = e                
                 var comp = [];
                 
                 while(actual.nextElementSibling.className != "StrCodigo3"){
-                    
-                    
                     if(actual.className === "StrCodigo4"){       
                         var temp = {}
                         temp['codigo'] = actual.innerText;
@@ -35,7 +41,6 @@ if(!fs.existsSync('./drogas.json')){
                         }    
                         comp.push(temp);
                     }
-    
     
                     actual = actual.nextElementSibling;
     
@@ -57,22 +62,11 @@ if(!fs.existsSync('./drogas.json')){
             })(); return obj})
      
         }).then((res) => {
-            
-            fs.writeFile('drogas.json', JSON.stringify(res), function (err) {
+            res.fechaCreacion = Date.now();
+            fs.writeFile('/tmp/drogas.json', JSON.stringify(res), function (err) {
                 if (err) throw err;
                 console.log('Archivo Creado con éxito');
-                var drogas = res.reduce((a,c)=>{
-                    for(p in c){
-                        c[p].forEach(d => {
-                            if(d){
-                                if(d.descripcion){
-                                    a.push(d.descripcion)
-                                }
-                            }
-                        })
-                    }
-                        return a;
-                    },[])
+                
                 buscaDrogas(drogas);
               });
           
@@ -84,21 +78,7 @@ if(!fs.existsSync('./drogas.json')){
 }
 else
 {
-    drogas = require('./drogas.json');    
-    
-    var drogas = drogas.reduce((a,c)=>{
-        for(p in c){
-            c[p].forEach(d => {
-                if(d){
-                    if(d.descripcion){
-                        a.push(d.descripcion)
-                    }
-                }
-            })
-        }
-            return a;
-        },[])
-    
+    drogas = require('./tmp/drogas.json');      
     
     buscaDrogas(drogas);
 }

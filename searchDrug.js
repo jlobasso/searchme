@@ -2,6 +2,19 @@ const browserPage = require('./browserPage');
 // var fs = require('fs');
 
 async function buscaDroga(drogas) {
+
+    var drogas = drogas.reduce((a,c)=>{
+        for(p in c){
+            c[p].forEach(d => {
+                if(d){
+                    if(d.descripcion){
+                        a.push(d.descripcion)
+                    }
+                }
+            })
+        }
+            return a;
+        },[])
     
     var url = "https://servicios.pami.org.ar/vademecum/views/consultaPublica/listado.zul";
 
