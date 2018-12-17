@@ -12,7 +12,7 @@ var existeArchivo = false;
 
 var drogas = {fechaCreacion:0};
 
-if(fs.existsSync('./tmp/drogas.json')){
+if(fs.existsSync('tmp/drogas.json')){
     drogas = require('./tmp/drogas.json');     
     existeArchivo = true;
 }
@@ -62,16 +62,21 @@ if(!existeArchivo || (drogas.fechaCreacion - Date.now()) > unDia){
             })(); return obj})
      
         }).then((res) => {
-            res.fechaCreacion = Date.now();
-            fs.writeFile('/tmp/drogas.json', JSON.stringify(res), function (err) {
+
+           var resultado = {};
+
+           resultado.datos = res;
+            
+           resultado.fechaCreacion = Date.now();
+
+            fs.writeFile('tmp/drogas.json', JSON.stringify(resultado), function (err) {
                 if (err) throw err;
-                console.log('Archivo Creado con éxito');
+                console.log('Archivo de drogas con éxito');
                 
-                buscaDrogas(drogas);
+                buscaDrogas(resultado);
               });
           
        });
-       browser.close()
     })();
 
 

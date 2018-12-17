@@ -3,7 +3,7 @@ const browserPage = require('./browserPage');
 
 async function buscaDroga(drogas) {
 
-    var drogas = drogas.reduce((a,c)=>{
+    var drogas = drogas.datos.reduce((a,c)=>{
         for(p in c){
             c[p].forEach(d => {
                 if(d){
@@ -76,6 +76,7 @@ async function buscaDroga(drogas) {
                     console.log("buscamos "+drogas[index++])
                     buscaDroga(page, drogas, index++)//la recursiva
                 }
+                
             }
 
 

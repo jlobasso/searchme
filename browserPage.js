@@ -14,7 +14,6 @@ async function browserPage(url){
             headless: false,
             args: (credenciales) ? [credenciales.path] : []
         });
-
     const page = await browser.newPage();
     (credenciales) ? page.authenticate({ username: credenciales.username, password: credenciales.passwrd }) : "";
 
